@@ -36,15 +36,20 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'django_extensions',
     "rest_framework",
-    "rest_framework_simplejwt",
+    "rest_framework.authtoken",
     "bcrypt",
     "try",
     "users",
     "messaging",
+    'corsheaders'
 ]
 
+
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -52,6 +57,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+   
 ]
 
 ROOT_URLCONF = "Django_Messaging_And_Calling.urls"
@@ -73,6 +79,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "Django_Messaging_And_Calling.wsgi.application"
+
 
 
 # Database
@@ -111,9 +118,20 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
 }
 
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',  
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',        
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',    
+    'django.contrib.auth.hashers.Argon2PasswordHasher',        
+]
+
+AUTH_USER_MODEL = 'users.CustomUser' 
+
+ 
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
