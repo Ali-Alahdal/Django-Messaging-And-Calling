@@ -1,8 +1,8 @@
-from rest_framework import serializer
+from rest_framework import serializers
 from .models import Chats
 
 
-class CreateChatSerializer(serializer.ModelSerializer):
+class CreateChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chats
         fields = ['user_1' , 'user_2']
@@ -13,7 +13,7 @@ class CreateChatSerializer(serializer.ModelSerializer):
         return newChat
     
 
-class GetChatsSerializer(serializer.ModelSerializer):
+class GetChatsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chats
-        fields = ['user_1' , 'user_2']
+        fields = ['user_1' , 'user_2' , 'username_1' , 'username_2']

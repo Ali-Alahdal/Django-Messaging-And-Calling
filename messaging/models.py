@@ -4,9 +4,17 @@ from users.models import CustomUser
 class Chats(models.Model):
     user_1 = models.ForeignKey(CustomUser , on_delete=models.CASCADE , related_name="chat_user1")
     user_2 = models.ForeignKey(CustomUser , on_delete=models.CASCADE  , related_name="chat_user2")
+    username_1 = models.CharField(max_length=150)  # Assuming max_length based on typical username length
+    username_2 = models.CharField(max_length=150)
 
     class Meta:
         unique_together = ('user_1', 'user_2')
+
+    def save(self, *args, **kwargs):
+        # Ensure usernames are stored when the chat is created
+        self.username_1 = self.user_1.username
+        self.username_2 = self.user_2.username
+        super().save(*args, **kwargs)
 
 
 class Messages(models.Model):

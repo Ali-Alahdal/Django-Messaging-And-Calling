@@ -20,3 +20,4 @@ def hello(request):
 class ViewTest(viewsets.ModelViewSet):
     queryset = Test_1.objects.all()
     serializer_class = Test_Serializer
+    

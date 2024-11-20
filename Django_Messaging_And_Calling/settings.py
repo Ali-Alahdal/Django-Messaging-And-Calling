@@ -42,14 +42,12 @@ INSTALLED_APPS = [
     "bcrypt",
     "try",
     "users",
-    "messaging",
-    'corsheaders'
+    "messaging"
 ]
 
 
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -122,17 +120,10 @@ REST_FRAMEWORK = {
     ),
 }
 
-PASSWORD_HASHERS = [
-    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',  
-    'django.contrib.auth.hashers.PBKDF2PasswordHasher',        
-    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',    
-    'django.contrib.auth.hashers.Argon2PasswordHasher',        
-]
 
-AUTH_USER_MODEL = 'users.CustomUser' 
 
+AUTH_USER_MODEL = 'users.CustomUser'
  
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
