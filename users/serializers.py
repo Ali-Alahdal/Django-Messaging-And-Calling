@@ -1,6 +1,14 @@
 from rest_framework import serializers
-
+from django.contrib.auth import get_user_model
 from .models import CustomUser
+
+
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer 
+
+
+class TokenObtainPairSerializer(TokenObtainPairSerializer):
+    username_field = get_user_model().EMAIL_FIELD
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,46 +1,53 @@
 from rest_framework.response import Response 
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.views import APIView
-from django.core.serializers.json import DjangoJSONEncoder
-from .serializers import UserSerializer 
-from .models import CustomUser
-import jwt,datetime , json
+from .serializers import UserSerializer , TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+    
+
+
+
 class RegisterView(APIView):
     def post(self , request):
-        serializer = UserSerializer(data =request.data)
+        serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception = True)
         serializer.save()
 
         return Response(serializer.data)
+        
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = TokenObtainPairSerializer
     
+    def post(self , request  , *args, **kwargs):
 
-class LoginView(APIView):
-    def post(self , request):
-        email = request.data['email']
-        password = request.data['password']
+        try:
+            res = super().post(request , *args, **kwargs)
+            tokens = res.data
 
-        user = CustomUser.objects.filter(email=email).first()
+            response = Response()
 
-        if user is None:
-            raise AuthenticationFailed("User not Found")
+            response.data = {
+                "success" : True
+            }
+                
+            response.set_cookie(
+                key = "access_token",
+                value = tokens["access"],
+                httponly = True,
+                secure = True
+
+            )
+
+            response.set_cookie(
+                key = "refresh_token",
+                value = tokens["refresh"],
+                httponly = True,
+                secure = True
+            )
+
+            return response
         
-        if not user.check_password(password):
-            raise AuthenticationFailed("Incorrect Password")
-        
-       
-        payload = {
-            "id" :  str(user.id) ,
-            "exp" : datetime.datetime.utcnow() + datetime.timedelta(minutes=15),
-            "iat" : datetime.datetime.utcnow()
-        }
-
-        token = jwt.encode(payload , "dwajhgfiow4236h96ygt++_987dawy221/vadw]/.,jdwahgfywfy91482088" , algorithm="HS256")
-        response = Response()
-
-    
-
-        response.set_cookie(key="jwt" , value=token , httponly = True)
-
-        return response
-        
-
+        except :
+          
+          return Response({"success" : False})
