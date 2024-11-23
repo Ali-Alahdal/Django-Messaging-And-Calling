@@ -2,24 +2,21 @@ from django.shortcuts import render
 from rest_framework import generics , status 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import CreateChatSerializer , GetChatsSerializer
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from .serializers import ChatSerializer 
 from .models import Chats
 import uuid
 # Create your views here.
 
 
+
 class ChatsView(APIView):
-    
-    def get(self , request , id):
-        chats = Chats.objects.filter(user_1 = id)
-        serializer = GetChatsSerializer(chats, many=True)
-        
-        return Response(
-             serializer.data
-            )
 
     def post(self , request):
-        serializer =  CreateChatSerializer(data=request.data)
+
+        serializer =  ChatSerializer(data=request.data)
         if serializer.is_valid():
 
             serializer.save()
@@ -28,6 +25,13 @@ class ChatsView(APIView):
         
         return Response(serializer.errors , status = status.HTTP_400_BAD_REQUEST)
     
-# class GetChatsView(viewsets.ModelViewSet):
-#     queryset = Chats.objects.filter()
-#     serializer_class = GetChatsSerializer
+
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getChat(request):
+    # chats = Chats.objects.filter(user_1 = request.user)
+
+    return Response({"Shill" : "djiwadja"})
+        

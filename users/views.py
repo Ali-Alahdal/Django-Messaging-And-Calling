@@ -2,8 +2,8 @@ from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.views import APIView
 from .serializers import UserSerializer , TokenObtainPairSerializer
-from rest_framework_simplejwt.views import TokenObtainPairView
-    
+from rest_framework_simplejwt.views import TokenObtainPairView ,TokenRefreshView
+
 
 
 
@@ -28,22 +28,23 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             response = Response()
 
             response.data = {
-                "success" : True
+                "success" : True,
+                "access_token" : tokens["access"]
             }
                 
-            response.set_cookie(
-                key = "access_token",
-                value = tokens["access"],
-                httponly = True,
-                secure = True
-
-            )
-
             response.set_cookie(
                 key = "refresh_token",
                 value = tokens["refresh"],
                 httponly = True,
-                secure = True
+            
+            )
+
+            response.set_cookie(
+                key = "access_token",
+                value = tokens["access"],
+                httponly = True,
+              
+               
             )
 
             return response
@@ -51,3 +52,35 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         except :
           
           return Response({"success" : False})
+        
+
+class CustomTokenRefreshView(TokenRefreshView):
+       
+    def post(self , request  , *args, **kwargs):
+        
+        try:
+            refresh_token = request.COOKIES.get("refresh_token")
+
+            request.data["refresh"] = refresh_token
+            res = super().post(request , *args, **kwargs)
+
+            tokens = res.data
+
+            response = Response()
+
+            response.data = {
+                "refreshed" : True
+            }
+
+            response.set_cookie(
+                key = "access_token",
+                value = tokens['access'],
+                httponly = True,
+              
+            )
+
+            return response
+
+        
+        except : 
+            return Response({"refreshed" : False})
