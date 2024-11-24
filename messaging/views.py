@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .serializers import ChatSerializer 
 from .models import Chats
+from django.http import JsonResponse
 import uuid
 # Create your views here.
 
@@ -31,7 +32,13 @@ class ChatsView(APIView):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getChat(request):
-    # chats = Chats.objects.filter(user_1 = request.user)
+    try:
+        chats = Chats.objects.filter(user_1 = request.user)
 
-    return Response({"Shill" : "djiwadja"})
+        serializer = ChatSerializer(chats , many=True)
+        return Response( serializer.data)
+    
+    except:
+        return Response({"success" : False})
+    
         

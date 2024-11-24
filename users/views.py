@@ -16,12 +16,61 @@ class RegisterView(APIView):
         return Response(serializer.data)
         
 
+
+
+
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = TokenObtainPairSerializer
     
     def post(self , request  , *args, **kwargs):
-
+        
         try:
+            res = super().post(request , *args, **kwargs)
+            tokens = res.data
+
+            response = Response()
+
+            response.data = {
+                "success" : True,
+                "access_token" : tokens["access"]
+            }
+            
+            response.set_cookie(
+                key = "access_token",
+                value = tokens["access"],
+                httponly = True,
+                secure = True,
+                samesite = "None"
+            )
+
+            response.set_cookie(
+                key = "refresh_token",
+                value = tokens["refresh"],
+                httponly = True,
+                secure = True,
+                samesite = "None"
+            )
+
+            return response
+        
+        except :
+          
+          return Response({"success" : False , "status" : "Email or Password is not valid"})
+        
+
+class CustomTokenRefreshView(TokenRefreshView):
+       
+    def post(self , request  , *args, **kwargs):
+        refresh_token = request.COOKIES.get("refresh_token")
+        try:
+
+            refresh_token = request.COOKIES.get("refresh_token")
+            
+            if refresh_token is None:
+                raise AuthenticationFailed("Mdary")
+                
+            
+            request.data["refresh"] = refresh_token
             res = super().post(request , *args, **kwargs)
             tokens = res.data
 
@@ -33,54 +82,15 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             }
                 
             response.set_cookie(
-                key = "refresh_token",
-                value = tokens["refresh"],
-                httponly = True,
-            
-            )
-
-            response.set_cookie(
                 key = "access_token",
                 value = tokens["access"],
                 httponly = True,
-              
-               
-            )
-
-            return response
-        
-        except :
-          
-          return Response({"success" : False})
-        
-
-class CustomTokenRefreshView(TokenRefreshView):
-       
-    def post(self , request  , *args, **kwargs):
-        
-        try:
-            refresh_token = request.COOKIES.get("refresh_token")
-
-            request.data["refresh"] = refresh_token
-            res = super().post(request , *args, **kwargs)
-
-            tokens = res.data
-
-            response = Response()
-
-            response.data = {
-                "refreshed" : True
-            }
-
-            response.set_cookie(
-                key = "access_token",
-                value = tokens['access'],
-                httponly = True,
-              
+                secure = True,
+                samesite = "None"
             )
 
             return response
 
         
         except : 
-            return Response({"refreshed" : False})
+            return Response({"success" : False , "status" : "You are not logged in." })
