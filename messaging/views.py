@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .serializers import ChatSerializer 
+from users.models import CustomUser
 from .models import Chats
 from django.http import JsonResponse
 import uuid
@@ -17,7 +18,10 @@ class ChatsView(APIView):
 
     def post(self , request):
 
-        serializer =  ChatSerializer(data=request.data)
+        
+        participants = request.data["participants"]
+        participants.append( request.COOKIES.get("user_id"))
+        serializer =  ChatSerializer(data={"participants" : participants} )
         if serializer.is_valid():
 
             serializer.save()
@@ -32,11 +36,23 @@ class ChatsView(APIView):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getChat(request):
-    try:
-        chats = Chats.objects.filter(user_1 = request.user)
 
-        serializer = ChatSerializer(chats , many=True)
-        return Response( serializer.data)
+    try: 
+       
+        chats =  request.user.chats.all()
+
+
+        chats_data = []
+        for chat in chats:    
+            chats_data.append(
+                {
+                    'chat_id': chat.id,
+                    'chat_name': [user.username  for user in chat.participants.exclude(id = request.user.id)],
+                    'chatUser_id' : [user.id  for user in chat.participants.exclude(id = request.user.id)]
+                }
+            )
+                
+        return Response( chats_data)
     
     except:
         return Response({"success" : False})

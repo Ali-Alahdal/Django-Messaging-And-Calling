@@ -3,6 +3,8 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.views import APIView
 from .serializers import UserSerializer , TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView ,TokenRefreshView
+from rest_framework_simplejwt.tokens import AccessToken
+
 
 
 
@@ -34,6 +36,15 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 "success" : True,
                 "access_token" : tokens["access"]
             }
+           
+            response.set_cookie(
+                key = "user_id",
+                value = AccessToken(tokens['access']).get("user_id"),
+                httponly = True,
+                secure = True,
+                samesite = "None"
+            )
+
             
             response.set_cookie(
                 key = "access_token",
@@ -42,7 +53,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 secure = True,
                 samesite = "None"
             )
-
+            
             response.set_cookie(
                 key = "refresh_token",
                 value = tokens["refresh"],
