@@ -32,8 +32,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-  
-
+    "daphne",
+    "channels",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -83,13 +83,25 @@ TEMPLATES = [
     },
 ]
 
+
+# Routing Configrations HTTP/S , WS
+ASGI_APPLICATION = "Django_Messaging_And_Calling.routing.application"
 WSGI_APPLICATION = "Django_Messaging_And_Calling.wsgi.application"
 
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [("127.0.0.1", 6379)],  # Ensure correct port and host
+#         },
+#     },
+# }
 
-
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = True
-
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
 
 
 # Database
@@ -162,7 +174,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
  
 
+# Authencation Configrations
 
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
