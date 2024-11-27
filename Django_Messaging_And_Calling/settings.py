@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "corsheaders",
     "daphne",
     "channels",
     "django.contrib.admin",
@@ -43,7 +44,7 @@ INSTALLED_APPS = [
     'django_extensions',
     "rest_framework",
     'rest_framework_simplejwt',
-    "corsheaders",
+   
     "try",
     "users",
     "messaging"
@@ -186,9 +187,9 @@ AUTHENTICATION_BACKENDS = ['users.auth_backends.EmailBackend']
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
-    "ROTATE_REFRESH_TOKENS": False,
-    "BLACKLIST_AFTER_ROTATION": False,
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
     "UPDATE_LAST_LOGIN": False,
     "ALGORITHM": "HS256",
     "VERIFYING_KEY": "",
@@ -214,11 +215,18 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 
-    "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
+    "TOKEN_OBTAIN_SERIALIZER": "users.serializers.TokenObtainPairSerializer",
     "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
     "TOKEN_VERIFY_SERIALIZER": "rest_framework_simplejwt.serializers.TokenVerifySerializer",
     "TOKEN_BLACKLIST_SERIALIZER": "rest_framework_simplejwt.serializers.TokenBlacklistSerializer",
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
+
+
+     'AUTH_COOKIE': 'access_token',  # Cookie name for the access token
+    'AUTH_COOKIE_SECURE': True,    # Set to True in production
+    'AUTH_COOKIE_HTTP_ONLY': True, # Make cookie HTTP-only
+    'AUTH_COOKIE_PATH': '/',       # Available to all endpoints
+    'AUTH_COOKIE_SAMESITE': 'Lax', # Adjust based on your needs
 }
 

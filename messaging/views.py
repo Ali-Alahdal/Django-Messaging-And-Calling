@@ -40,8 +40,6 @@ def getChat(request):
     try: 
        
         chats =  request.user.chats.all()
-
-
         chats_data = []
         for chat in chats:    
             chats_data.append(

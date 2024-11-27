@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from .models import Chats
-
+from .models import Chats , Messages
+from users.serializers import UserSerializer
 
 
 
@@ -8,7 +8,7 @@ class ChatSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Chats
-        fields = ['participants','created_at' ]
+        fields = ['participants','created_at']
 
     def create(self , data ):
         
@@ -19,3 +19,14 @@ class ChatSerializer(serializers.ModelSerializer):
 
    
       
+class MessageSerializer(serializers.ModelSerializer):
+
+    
+    sender_id = serializers.UUIDField(format='hex')
+
+    class Meta:
+        model = Messages
+        fields = ["content" , "sender_id", "sent_time" , "chat"]
+      
+
+    

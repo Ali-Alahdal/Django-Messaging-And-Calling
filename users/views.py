@@ -5,6 +5,7 @@ from .serializers import UserSerializer , TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView ,TokenRefreshView
 from rest_framework_simplejwt.tokens import AccessToken
 
+from datetime import datetime, timedelta
 
 
 
@@ -35,6 +36,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             response.data = {
                 "success" : True,
                 "access_token" : tokens["access"]
+                
             }
            
             response.set_cookie(
@@ -42,7 +44,8 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 value = AccessToken(tokens['access']).get("user_id"),
                 httponly = True,
                 secure = True,
-                samesite = "None"
+                samesite = "None",
+                expires=datetime.utcnow() + timedelta(days=1), 
             )
 
             
@@ -51,7 +54,8 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 value = tokens["access"],
                 httponly = True,
                 secure = True,
-                samesite = "None"
+                samesite = "None",
+                expires=datetime.utcnow() + timedelta(minutes=15),  
             )
             
             response.set_cookie(
@@ -59,7 +63,8 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 value = tokens["refresh"],
                 httponly = True,
                 secure = True,
-                samesite = "None"
+                samesite = "None",
+                expires=datetime.utcnow() + timedelta(days=1),  
             )
 
             return response

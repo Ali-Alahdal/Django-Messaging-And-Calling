@@ -13,5 +13,5 @@ class Messages(models.Model):
     chat = models.ForeignKey(Chats , on_delete=models.CASCADE , related_name="chat_messages")
     content = models.TextField()
     sender = models.ForeignKey(CustomUser ,  on_delete=models.CASCADE , related_name="message_sender")
-    receiver = models.ForeignKey(CustomUser ,  on_delete=models.CASCADE , related_name="message_receiver")
-    send_time = models.DateTimeField(auto_now_add=True)
+    sent_time = models.DateTimeField(auto_now_add=True)
+
