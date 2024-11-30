@@ -8,11 +8,11 @@ class ChatSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Chats
-        fields = ['participants','created_at']
+        fields = ['participants','created_at' , 'chat_name']
 
     def create(self , data ):
         
-        newChat = Chats.objects.create()
+        newChat = Chats.objects.create(chat_name = data["chat_name"])
         newChat.participants.set(data["participants"])
         newChat.save() 
         return newChat

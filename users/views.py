@@ -6,11 +6,12 @@ from rest_framework_simplejwt.views import TokenObtainPairView ,TokenRefreshView
 from rest_framework_simplejwt.tokens import AccessToken
 
 from datetime import datetime, timedelta
-
+from rest_framework.permissions import AllowAny
 
 
 
 class RegisterView(APIView):
+    permission_classes = [AllowAny]
     def post(self , request):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception = True)

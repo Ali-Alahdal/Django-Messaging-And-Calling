@@ -21,7 +21,7 @@ class ChatsView(APIView):
         
         participants = request.data["participants"]
         participants.append( request.COOKIES.get("user_id"))
-        serializer =  ChatSerializer(data={"participants" : participants} )
+        serializer =  ChatSerializer(data={"participants" : participants , "chat_name" : request.data["chat_name"]} )
         if serializer.is_valid():
 
             serializer.save()
@@ -42,13 +42,23 @@ def getChat(request):
         chats =  request.user.chats.all()
         chats_data = []
         for chat in chats:    
-            chats_data.append(
-                {
-                    'chat_id': chat.id,
-                    'chat_name': [user.username  for user in chat.participants.exclude(id = request.user.id)],
-                    'chatUser_id' : [user.id  for user in chat.participants.exclude(id = request.user.id)]
-                }
-            )
+            if chat.chat_name is None or chat.chat_name == "":
+                chats_data.append(
+                    {
+                        'chat_id': chat.id,
+                        
+                        'chat_name': [user.username  for user in chat.participants.exclude(id = request.user.id)],
+                        'chatUser_id' : [user.id  for user in chat.participants.exclude(id = request.user.id)]
+                    }
+                )
+            else :
+                chats_data.append(
+                    {
+                        'chat_id': chat.id,
+                        'chat_name': chat.chat_name,
+                        'chatUser_id' : [user.id  for user in chat.participants.exclude(id = request.user.id)]
+                    }
+                )
                 
         return Response( chats_data)
     

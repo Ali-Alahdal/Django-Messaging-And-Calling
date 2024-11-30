@@ -4,6 +4,7 @@ from .models import CustomUser
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer 
 
 
+
 class TokenObtainPairSerializer(TokenObtainPairSerializer):
     username_field = get_user_model().EMAIL_FIELD
 
@@ -26,3 +27,10 @@ class UserSerializer(serializers.ModelSerializer):
         
         instance.save()
         return instance
+    
+
+class SearchUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomUser
+        fields = ['id' , 'username']

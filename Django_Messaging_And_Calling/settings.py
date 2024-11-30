@@ -32,9 +32,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "corsheaders",
+   
     "daphne",
     "channels",
+    "corsheaders",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -98,11 +99,23 @@ WSGI_APPLICATION = "Django_Messaging_And_Calling.wsgi.application"
 #     },
 # }
 
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [("127.0.0.1", 6379)],  # Replace with your Redis server details
+#         },
+#     },
+# }
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer",
     },
 }
+
+# ASGI_APPLICATION_TIMEOUT = 10  # seconds
+
 
 
 # Database
@@ -223,7 +236,7 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 
 
-     'AUTH_COOKIE': 'access_token',  # Cookie name for the access token
+    'AUTH_COOKIE': 'access_token',  # Cookie name for the access token
     'AUTH_COOKIE_SECURE': True,    # Set to True in production
     'AUTH_COOKIE_HTTP_ONLY': True, # Make cookie HTTP-only
     'AUTH_COOKIE_PATH': '/',       # Available to all endpoints
