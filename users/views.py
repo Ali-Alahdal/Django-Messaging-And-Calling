@@ -1,10 +1,11 @@
 from rest_framework.response import Response 
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.views import APIView
-from .serializers import UserSerializer , TokenObtainPairSerializer
+from .serializers import UserSerializer , TokenObtainPairSerializer 
+from rest_framework.decorators import api_view, permission_classes , authentication_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView ,TokenRefreshView
 from rest_framework_simplejwt.tokens import AccessToken
-
 from datetime import datetime, timedelta
 from rest_framework.permissions import AllowAny
 
@@ -111,3 +112,24 @@ class CustomTokenRefreshView(TokenRefreshView):
         
         except : 
             return Response({"success" : False , "status" : "You are not logged in." })
+
+
+
+api_view(["POST"])
+permission_classes([IsAuthenticated])
+def logout(request):
+    try:
+        resonse = Response()
+        resonse.data = {
+            'success' : True
+        }
+
+        resonse.delete_cookie("access_token" ,samesite = "None")
+        resonse.delete_cookie("refresh_token" ,samesite = "None")
+        resonse.delete_cookie("user_id" ,samesite = "None")
+
+        return resonse
+    except:
+        return Response({
+            'success' : True
+        })
