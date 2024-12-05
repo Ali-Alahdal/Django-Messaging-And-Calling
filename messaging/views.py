@@ -46,9 +46,9 @@ def getChat(request):
                 chats_data.append(
                     {
                         'chat_id': chat.id,
-                        
                         'chat_name': [user.username  for user in chat.participants.exclude(id = request.user.id)],
-                        'chatUser_id' : [user.id  for user in chat.participants.exclude(id = request.user.id)]
+                        'chatUser_id' : [user.id  for user in chat.participants.exclude(id = request.user.id)],
+                        'group' : False
                     }
                 )
             else :
@@ -56,7 +56,8 @@ def getChat(request):
                     {
                         'chat_id': chat.id,
                         'chat_name': chat.chat_name,
-                        'chatUser_id' : [user.id  for user in chat.participants.exclude(id = request.user.id)]
+                        'chatUser_id' : [user.id  for user in chat.participants.exclude(id = request.user.id)],
+                        'group' : True
                     }
                 )
                 

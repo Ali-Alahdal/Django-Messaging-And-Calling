@@ -115,8 +115,9 @@ class CustomTokenRefreshView(TokenRefreshView):
 
 
 
-api_view(["POST"])
-permission_classes([IsAuthenticated])
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def logout(request):
     try:
         resonse = Response()
@@ -124,12 +125,18 @@ def logout(request):
             'success' : True
         }
 
-        resonse.delete_cookie("access_token" ,samesite = "None")
-        resonse.delete_cookie("refresh_token" ,samesite = "None")
-        resonse.delete_cookie("user_id" ,samesite = "None")
+        resonse.delete_cookie("access_token", path="/" ,samesite = "None")
+        resonse.delete_cookie("refresh_token" , path="/",samesite = "None")
+        resonse.delete_cookie("user_id" , path="/",samesite = "None")
 
         return resonse
     except:
+
         return Response({
-            'success' : True
+            'success' : False
         })
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_profile(request):
+    

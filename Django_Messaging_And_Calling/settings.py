@@ -90,23 +90,7 @@ TEMPLATES = [
 ASGI_APPLICATION = "Django_Messaging_And_Calling.routing.application"
 WSGI_APPLICATION = "Django_Messaging_And_Calling.wsgi.application"
 
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels_redis.core.RedisChannelLayer",
-#         "CONFIG": {
-#             "hosts": [("127.0.0.1", 6379)],  # Ensure correct port and host
-#         },
-#     },
-# }
 
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels_redis.core.RedisChannelLayer",
-#         "CONFIG": {
-#             "hosts": [("127.0.0.1", 6379)],  # Replace with your Redis server details
-#         },
-#     },
-# }
 
 CHANNEL_LAYERS = {
     "default": {
@@ -192,6 +176,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
+
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SECURE = True
+CSRF_TRUSTED_ORIGINS = ['http://localhost:5173']
+
 
 AUTH_USER_MODEL = 'users.CustomUser'
 

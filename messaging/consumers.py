@@ -34,7 +34,7 @@ class SearchConsumer(SyncConsumer):
                 self.room_name,
                 {
                     "type": "websocket.message",
-                    "text": json.dumps(serializer.data)
+                    "text": json.dumps(serializer.data[:10])
                 }
             )
         else : 
