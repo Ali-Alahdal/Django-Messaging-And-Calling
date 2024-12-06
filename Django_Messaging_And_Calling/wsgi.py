@@ -16,4 +16,4 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Django_Messaging_And_Calling.se
 
 
 application = get_wsgi_application()
-app = application
+
