@@ -104,9 +104,9 @@ CHANNEL_LAYERS = {
     },
 }
 
-STATICFILES_DIRS = [BASE_DIR/'static',]
-STATIC_ROOT = BASE_DIR/'staticfiles'
-ALLOWED_HOSTS = ['.vercel.app', '.now.sh']
+# STATICFILES_DIRS = [BASE_DIR/'static',]
+# STATIC_ROOT = BASE_DIR/'staticfiles'
+# ALLOWED_HOSTS = ['.vercel.app', '.now.sh']
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
