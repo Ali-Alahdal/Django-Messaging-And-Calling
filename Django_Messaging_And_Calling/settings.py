@@ -110,14 +110,14 @@ STATIC_ROOT = BASE_DIR/'staticfiles'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    # "default": {
-    #     "ENGINE": "django.db.backends.postgresql",
-    #     'NAME': 'dbtest',
-    #     'USER': 'postgres',
-    #     'PASSWORD': 'Aa0559264432.',
-    #     'HOST': 'localhost',
-    #     'PORT': '5432'
-    # }
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        'NAME': 'dbtest',
+        'USER': 'postgres',
+        'PASSWORD': 'Aa0559264432.',
+        'HOST': 'localhost',
+        'PORT': '5432'
+    }
 }
 
 
