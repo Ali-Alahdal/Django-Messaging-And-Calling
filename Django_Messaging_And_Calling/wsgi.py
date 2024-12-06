@@ -13,4 +13,7 @@ from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Django_Messaging_And_Calling.settings")
 
+
+
 application = get_wsgi_application()
+app = application
