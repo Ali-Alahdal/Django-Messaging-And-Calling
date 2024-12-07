@@ -1,15 +1,14 @@
 from rest_framework.response import Response 
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.views import APIView
-from .serializers import UserSerializer , TokenObtainPairSerializer 
+from .serializers import UserSerializer , TokenObtainPairSerializer , SearchUserSerializer
 from rest_framework.decorators import api_view, permission_classes , authentication_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView ,TokenRefreshView
 from rest_framework_simplejwt.tokens import AccessToken
 from datetime import datetime, timedelta
 from rest_framework.permissions import AllowAny
-
-
+from .models import CustomUser
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
@@ -136,7 +135,33 @@ def logout(request):
             'success' : False
         })
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_profile(request):
-    pass
+    try:    
+        
+
+        response = Response()
+        
+        decoded = AccessToken(request.COOKIES.get("access_token"))
+        print(decoded.payload["user_id"])
+        user = CustomUser.objects.get(pk=decoded.payload["user_id"])
+        serializer = SearchUserSerializer(user)
+        
+        
+        response.data = {
+            "success" : True,
+            "user_id" : serializer.data.get("id"),
+            "username" : serializer.data.get("username")
+        }
+      
+        
+        return response
+    except:
+      return Response({
+          "success" : False
+      })
+      
+ 
+
