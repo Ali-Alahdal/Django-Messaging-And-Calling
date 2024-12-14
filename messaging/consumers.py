@@ -13,6 +13,70 @@ import json
 
 
 
+class WebRTCConsumer(SyncConsumer):
+    def websocket_connect(self, event):
+       
+        self.room_name = "webrtcgroup"
+        self.send({"type": "websocket.accept"})
+
+        async_to_sync(self.channel_layer.group_add)(self.room_name, self.channel_name)
+
+    def websocket_receive(self, event):
+        print(json.loads(event.get("text")))
+
+      
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_name,
+            {
+                "type": "websocket.message",
+                "text": json.dumps(event.get("text"))
+            }
+        )
+
+    def websocket_message(self, event):
+         self.send({
+
+            "type": "websocket.send", 
+            "text": event.get("text")
+
+        })  
+       
+
+    def websocket_disconnect(self, event):
+
+        async_to_sync(self.channel_layer.group_discard)(self.room_name, self.channel_name)
+     
+   
+        
+
+
+# class CallConsumer(SyncConsumer):
+#     def websocket_connect(self , event):
+#         chat_id =  self.scope['url_route']['kwargs']['chat_id']
+#         self.room_name = str(chat_id)
+#         self.send({"type": "websocket.accept"})
+#         async_to_sync(self.channel_layer.group_add)(self.room_name, self.channel_name)
+#         print("connected" ,  self.room_name)
+
+
+#     def websocket_receive(self, text_data):
+#         # data = json.loads(text_data)
+#         self.channel_layer.group_send(
+#             "webrtc_group",
+#             {
+#                 "type": "signal_message",
+#                 "message": text_data
+#             }
+#         )
+
+#     def signal_message(self, event):
+#          self.send(text_data=json.dumps(event["message"]))
+
+#     def websocket_disconnect(self, event):
+#         async_to_sync(self.channel_layer.group_discard)(self.room_name, self.channel_name)
+#         print("disconnected")
+
+
 class SearchConsumer(SyncConsumer):
     def websocket_connect(self, event):
        
@@ -21,7 +85,6 @@ class SearchConsumer(SyncConsumer):
         self.send({"type": "websocket.accept"})
 
         async_to_sync(self.channel_layer.group_add)(self.room_name, self.channel_name)
-        print(self.room_name)
 
     def websocket_receive(self, event):
 
@@ -60,7 +123,6 @@ class SearchConsumer(SyncConsumer):
     def websocket_disconnect(self, event):
 
         async_to_sync(self.channel_layer.group_discard)(self.room_name, self.channel_name)
-        print("Server: Connection Closed")
      
    
 
@@ -87,7 +149,6 @@ class OneConsumer(SyncConsumer):
 
         })
       
-        print(f"Server: Connection Accepted , {serializer.data} , ")
         async_to_sync(self.channel_layer.group_add)(self.room_name, self.channel_name)
      
     
@@ -123,7 +184,6 @@ class OneConsumer(SyncConsumer):
 
     def websocket_disconnect(self, event):
         async_to_sync(self.channel_layer.group_discard)(self.room_name, self.channel_name)
-        print("Server: Connection Closed")
 
 
 

@@ -7,12 +7,13 @@ class Chats(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
    
 
-   
-
 
 class Messages(models.Model):
     chat = models.ForeignKey(Chats , on_delete=models.CASCADE , related_name="chat_messages")
     content = models.TextField()
     sender = models.ForeignKey(CustomUser ,  on_delete=models.CASCADE , related_name="message_sender")
     sent_time = models.DateTimeField(auto_now_add=True)
+
+   
+
 

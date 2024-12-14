@@ -35,6 +35,7 @@ INSTALLED_APPS = [
    
     "daphne",
     "channels",
+    
     "corsheaders",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -151,11 +152,12 @@ REST_FRAMEWORK = {
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = 'Etc/GMT-3'
+USE_TZ = True
 
 USE_I18N = True
 
-USE_TZ = True
+# USE_TZ = True
 
 
  
