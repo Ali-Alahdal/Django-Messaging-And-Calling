@@ -181,8 +181,8 @@ CORS_ALLOW_CREDENTIALS = True
 
 CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = True
-CSRF_TRUSTED_ORIGINS = ['http://localhost:5173']
-
+CSRF_TRUSTED_ORIGINS = ['http://localhost:5173' , "http://192.168.137.77:5173"]
+ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'users.CustomUser'
 

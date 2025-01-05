@@ -1,5 +1,6 @@
 
-from channels.consumer import SyncConsumer 
+from channels.consumer import SyncConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.exceptions import StopConsumer
 
 from asgiref.sync import async_to_sync
@@ -13,39 +14,28 @@ import json
 
 
 
-class WebRTCConsumer(SyncConsumer):
-    def websocket_connect(self, event):
-       
-        self.room_name = "webrtcgroup"
-        self.send({"type": "websocket.accept"})
+class CallConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        self.room_name = "call_room"
+        await self.channel_layer.group_add(self.room_name, self.channel_name)
+        await self.accept()
 
-        async_to_sync(self.channel_layer.group_add)(self.room_name, self.channel_name)
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard(self.room_name, self.channel_name)
 
-    def websocket_receive(self, event):
-        print(json.loads(event.get("text")))
-
-      
-        async_to_sync(self.channel_layer.group_send)(
+    async def receive(self, text_data):
+        data = json.loads(text_data)
+        # Broadcast data to the group
+        await self.channel_layer.group_send(
             self.room_name,
             {
-                "type": "websocket.message",
-                "text": json.dumps(event.get("text"))
+                'type': 'call_message',
+                'message': data,
             }
         )
 
-    def websocket_message(self, event):
-         self.send({
-
-            "type": "websocket.send", 
-            "text": event.get("text")
-
-        })  
-       
-
-    def websocket_disconnect(self, event):
-
-        async_to_sync(self.channel_layer.group_discard)(self.room_name, self.channel_name)
-     
+    async def call_message(self, event):
+        await self.send(text_data=json.dumps(event['message']))
    
         
 

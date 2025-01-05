@@ -1,6 +1,6 @@
 from channels.routing import ProtocolTypeRouter, URLRouter
-from django.urls import path
-from messaging.consumers import  OneConsumer , SearchConsumer , WebRTCConsumer
+from django.urls import path , re_path
+from messaging.consumers import  OneConsumer , SearchConsumer , CallConsumer
 from channels.sessions import SessionMiddlewareStack
 
 from users.authentication import CustomAuthentication 
@@ -17,7 +17,7 @@ application = ProtocolTypeRouter({
         
             path("ws/search/" , SearchConsumer.as_asgi()),
             path("ws/chat/<int:chat_id>" , OneConsumer.as_asgi()),
-            path("ws/call/" , WebRTCConsumer.as_asgi())
+            path("ws/call/" , CallConsumer.as_asgi())
         
     ]))
     
