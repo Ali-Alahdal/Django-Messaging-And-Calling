@@ -42,7 +42,7 @@ def getChat(request):
         chats =  request.user.chats.all()
         chats_data = []
         for chat in chats:    
-            if chat.chat_name is None or chat.chat_name == "":
+            if chat.chat_name is None or chat.chat_name == "None":
                 chats_data.append(
                     {
                         'chat_id': chat.id,

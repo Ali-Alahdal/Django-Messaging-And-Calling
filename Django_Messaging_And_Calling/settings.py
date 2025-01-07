@@ -35,7 +35,6 @@ INSTALLED_APPS = [
    
     "daphne",
     "channels",
-    
     "corsheaders",
     "django.contrib.admin",
     "django.contrib.auth",
